@@ -26,5 +26,7 @@
 #define STEPPER_SPEED 500
 #define STEPPER_MAX_STEPS 2048 // Full rotation = 2048 steps for 28BYJ-48
 #define STEPPER_SWEEP 1024     // Sweep range in steps (half rotation)
+#define STEPPER_MIN_WAIT 500
+#define STEPPER_MAX_WAIT 3000
 
 #endif
