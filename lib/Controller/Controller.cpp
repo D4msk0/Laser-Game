@@ -59,13 +59,13 @@ void Controller::update(int logLevel)
         _startTime = millis();
         String msg = "[TIMER] Started manually!";
         log(msg);
-        if (logLevel >= 1) Serial.println(msg);
+        if (logLevel >= 2) Serial.println(msg);
       }
       else
       {
         String msg = "[TIMER] Manually stopped.";
         log(msg);
-        if (logLevel >= 1) Serial.println(msg);
+        if (logLevel >= 2) Serial.println(msg);
       }
     }
   }
@@ -78,7 +78,7 @@ void Controller::update(int logLevel)
       _isRunning = false;
       String msg = "[TIMER] Time is up. Auto-stop.";
       log(msg);
-      if (logLevel >= 1) Serial.println(msg);
+      if (logLevel >= 2) Serial.println(msg);
     }
   }
 }
@@ -103,7 +103,7 @@ void Controller::handleMessage(uint8_t *data, size_t len, int logLevel)
     {
       String out = "[WEB] System started";
       log(out);
-      if (logLevel >= 1) Serial.println(out);
+      if (logLevel >= 2) Serial.println(out);
     }
   }
   else if (msg == "stop")
@@ -111,7 +111,7 @@ void Controller::handleMessage(uint8_t *data, size_t len, int logLevel)
     this->stop();
     String out = "[WEB] System stopped";
     log(out);
-    if (logLevel >= 1) Serial.println(out);
+    if (logLevel >= 2) Serial.println(out);
   }
   else if (msg == "status")
   {
@@ -120,20 +120,20 @@ void Controller::handleMessage(uint8_t *data, size_t len, int logLevel)
       long timeLeft = getRemainingTime();
       String out = "[STATUS] Active. Remaining: " + String(timeLeft / 60) + "m " + String(timeLeft % 60) + "s";
       log(out);
-      if (logLevel >= 1) Serial.println(out);
+      if (logLevel >= 2) Serial.println(out);
     }
     else
     {
       String out = "[STATUS] System is stand-by.";
       log(out);
-      if (logLevel >= 1) Serial.println(out);
+      if (logLevel >= 2) Serial.println(out);
     }
   }
   else
   {
     String out = "[WEB] Unknown command: " + msg;
     log(out);
-    if (logLevel >= 1) Serial.println(out);
+    if (logLevel >= 2) Serial.println(out);
   }
 }
 

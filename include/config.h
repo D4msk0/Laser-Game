@@ -2,10 +2,10 @@
 #define CONFIG_H
 
 // Debug levels:
-// 0 = Off
-// 1 = System / Timer logs
-// 2 = Detailed hardware logs (Servo positions, Stepper steps, etc.)
-#define DEBUG_LEVEL 2
+// 0 = Silent
+// 1 = Browser monitoring (WebSerial only)
+// 2 = Full debug (WebSerial + Serial, including hardware logs)
+#define DEBUG_LEVEL 1
 
 // Controller
 #define BUTTON_PIN 4
