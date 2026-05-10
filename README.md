@@ -23,14 +23,35 @@ The system manages autonomous servo and stepper motor movements, a physical time
 ## 📂 Project Structure
 - `src/main.cpp`: Central orchestrator and application entry point
 - `include/config.h`: All hardware pins, parameters, and default debug level
-- `include/secrets.h`: WiFi credentials (excluded from version control)
+- `include/secrets.h`: WiFi credentials (excluded from version control — copy `secrets.h.template` and fill in your credentials)
 - `lib/NetworkManager`: Handles WiFi connectivity and WebSerial initialization
 - `lib/ServoMotor`: Manages random, jitter-free servo positioning within safe limits
 - `lib/StepperMotor`: Manages organic random sweep movements within a configurable range
 - `lib/Controller`: Manages global state (Start/Stop), physical button logic, and the countdown timer
-- `include/secrets.h`: WiFi credentials (excluded from version control — copy `secrets.h.template` and fill in your credentials)
 
--   <img width="2768" height="1434" alt="image" src="https://github.com/user-attachments/assets/4993eaf7-9f37-40da-929f-f4099dfbbfc1" />
+## 🗺 Architecture
+
+The diagrams below document the system architecture and runtime behavior of the Lasergame controller. Together they tell the full story: how the system is structured, what happens at boot, how the main loop keeps everything responsive, and how a WebSerial command travels from the browser to the hardware and back. The architecture is designed around three principles — modularity, non-blocking execution, and a clean separation between hardware logic and network output.
+
+### High-level architecture
+<img width="2500" height="1200" alt="lasergame_architecture_v3" src="https://github.com/user-attachments/assets/98930114-b121-4ba7-ac87-ca3233fa02c0" />
+
+The system is built around strict separation of concerns. Each hardware component has its own class (ServoMotor, StepperMotor, Controller) with no knowledge of the network layer. Instead of calling WebSerial directly, classes expose a log callback that main.cpp wires up at boot. This keeps every class independently reusable and testable. All hardware pins and parameters live in config.h — no magic numbers anywhere in the code.
+
+### Boot sequence
+<img width="2500" height="1200" alt="lasergame_boot_sequence" src="https://github.com/user-attachments/assets/286638d6-f575-4a4d-9c5a-654b0513e991" />
+
+setup() runs once and order matters. WiFi must be connected before WebSerial can initialize, and the message callback must be registered before the server starts. randomSeed() uses a floating ADC pin to ensure the servo and stepper generate a unique movement pattern every session. Log callbacks are wired last, just before the hardware is initialized — guaranteeing that any log output from begin() is already routed correctly.
+
+### Runtime loop
+<img width="2500" height="1200" alt="lasergame_runtime_loop" src="https://github.com/user-attachments/assets/f1321744-f488-4230-bdc2-1edaa8c62b18" />
+
+loop() runs thousands of times per second and nothing in it ever blocks. Controller.update() always runs — it needs to catch button presses and check the timer regardless of system state. The isRunning() check is the single gate that controls all hardware: when the system is in standby, the servo and stepper are completely idle. When active, both update() methods are called every tick — they use internal timers to decide when to actually move, keeping the loop free at all times.
+
+### WebSerial command flow
+<img width="2500" height="1200" alt="lasergame_webserial_command_flow" src="https://github.com/user-attachments/assets/0a24645d-3e27-4d0a-bfee-78bc2aa7a5c4" />
+
+Incoming messages are handled in two layers. handleWebMsg() in main.cpp owns the debug and help commands — these need access to debugLevel which lives in main.cpp. Everything else is forwarded to Controller.handleMessage(), which owns the hardware commands. Responses never go directly to WebSerial from inside a class — they always travel back through the log callback. This means the Controller has no dependency on the network layer and the routing logic stays in one place.
 
 ## 📡 Web Commands (via WebSerial)
 | Command | Description |
