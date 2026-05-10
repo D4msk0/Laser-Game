@@ -5,7 +5,6 @@
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <WebSerial.h>
-#include <ArduinoOTA.h>
 
 class NetworkManager {
   private:
@@ -16,7 +15,6 @@ class NetworkManager {
   public:
     NetworkManager(const char* ssid, const char* password, AsyncWebServer* server);
     void begin(int logLevel = 1);
-    void update();
 };
 
 #endif

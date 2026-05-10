@@ -14,15 +14,11 @@ void NetworkManager::begin(int logLevel) {
 
   WebSerial.begin(_server);
   _server->begin();
-  ArduinoOTA.begin();
+
 
   if (logLevel >= 1) {
-    Serial.println("\n[SYSTEM] WiFi verbonden!");
+    Serial.println("\n[SYSTEM] WiFi connected!");
     Serial.print("[SYSTEM] IP-adres: ");
     Serial.println(WiFi.localIP());
   }
-}
-
-void NetworkManager::update() {
-  ArduinoOTA.handle();
 }

@@ -19,6 +19,5 @@ void setup() {
 }
 
 void loop() {
-  network.update();
   Servo1.update(DEBUG_LEVEL);
 }
