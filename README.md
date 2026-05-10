@@ -30,6 +30,8 @@ The system manages autonomous servo and stepper motor movements, a physical time
 - `lib/Controller`: Manages global state (Start/Stop), physical button logic, and the countdown timer
 - `include/secrets.h`: WiFi credentials (excluded from version control — copy `secrets.h.template` and fill in your credentials)
 
+-   <img width="2768" height="1434" alt="image" src="https://github.com/user-attachments/assets/4993eaf7-9f37-40da-929f-f4099dfbbfc1" />
+
 ## 📡 Web Commands (via WebSerial)
 | Command | Description |
 |---|---|
