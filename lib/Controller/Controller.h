@@ -17,7 +17,7 @@ class Controller {
     Controller(int buttonPin, unsigned long runtimeMinutes);
     void begin();
     void update(int logLevel = 0);
-    void start();
+    bool start();
     void stop();
     void handleMessage(uint8_t *data, size_t len, int logLevel = 0);
     bool isRunning(); // Check to see if the controller is currently running
