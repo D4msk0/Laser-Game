@@ -1,11 +1,11 @@
-#ifndef RANDOM_SERVO_H
-#define RANDOM_SERVO_H
+#ifndef SERVO_MOTOR_H
+#define SERVO_MOTOR_H
 
 #include <Arduino.h>
 #include <ESP32Servo.h>
 #include <WebSerial.h>
 
-class RandomServo {
+class ServoMotor {
   private:
     Servo _servo;
     int _pin;
@@ -18,7 +18,7 @@ class RandomServo {
 
   public:
     // Constructor
-    RandomServo(int pin, int minAngle, int maxAngle, int minWait, int maxWait);
+    ServoMotor(int pin, int minAngle, int maxAngle, int minWait, int maxWait);
     
     void begin();
     void update(int logLevel = 0);

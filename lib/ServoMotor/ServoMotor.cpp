@@ -1,7 +1,7 @@
-#include "RandomServo.h"
+#include "ServoMotor.h"
 #include <WebSerial.h>
 
-RandomServo::RandomServo(int pin, int minAngle, int maxAngle, int minWait, int maxWait) {
+ServoMotor::ServoMotor(int pin, int minAngle, int maxAngle, int minWait, int maxWait) {
   _pin = pin;
   _minAngle = minAngle;
   _maxAngle = maxAngle;
@@ -11,12 +11,12 @@ RandomServo::RandomServo(int pin, int minAngle, int maxAngle, int minWait, int m
   _interval = 0;
 }
 
-void RandomServo::begin() {
+void ServoMotor::begin() {
   _servo.attach(_pin);
   _interval = random(_minWait, _maxWait);
 }
 
-void RandomServo::update(int logLevel) {
+void ServoMotor::update(int logLevel) {
   unsigned long currentTime = millis();
   
   if (currentTime - _prevTime >= _interval) {

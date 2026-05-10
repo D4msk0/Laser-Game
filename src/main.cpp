@@ -5,13 +5,13 @@
 #include "secrets.h"
 
 #include "NetworkManager.h"
-#include "RandomServo.h"
+#include "ServoMotor.h"
 #include "Controller.h"
 
 AsyncWebServer server(80);
 NetworkManager network(ssid, password, &server);
-RandomServo Servo1(18, 12, 170, 200, 2000); // int pin, int minAngle, int maxAngle, int minWait, int maxWait
-Controller controller(4, 15);               // int pin, int time (minutes)
+ServoMotor Servo1(SERVO_PIN, SERVO_MIN_ANGLE, SERVO_MAX_ANGLE, SERVO_MIN_WAIT, SERVO_MAX_WAIT);
+Controller controller(BUTTON_PIN, RUNTIME_MINUTES);
 
 void handleWebMsg(uint8_t *data, size_t len)
 {
