@@ -8,8 +8,8 @@
 
 AsyncWebServer server(80);
 NetworkManager network(ssid, password, &server);
-RandomServo Servo1(18, 12, 170, 200, 2000);
-Controller controller(4, 15); // Pin 4, 15 minuten
+RandomServo Servo1(18, 12, 170, 200, 2000); // int pin, int minAngle, int maxAngle, int minWait, int maxWait
+Controller controller(4, 15); // int pin, int time (minutes)
 
 void handleWebMsg(uint8_t *data, size_t len) {
   controller.handleMessage(data, len, DEBUG_LEVEL);
