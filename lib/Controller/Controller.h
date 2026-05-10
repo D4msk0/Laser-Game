@@ -21,7 +21,7 @@ class Controller {
     void stop();
     void handleMessage(uint8_t *data, size_t len, int logLevel = 0);
     bool isRunning(); // Check to see if the controller is currently running
-    long getRemainingTime(); // Get the remaining time in milliseconds
+    long getRemainingTime(); // Get the remaining time in seconds
 };
 
 #endif
