@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <ESP32Servo.h>
-#include <WebSerial.h>
 
 class ServoMotor {
   private:
@@ -15,6 +14,8 @@ class ServoMotor {
     int _maxWait;
     unsigned long _prevTime;
     unsigned long _interval;
+    void (*_logCallback)(const String&) = nullptr;
+
 
   public:
     // Constructor
@@ -22,6 +23,8 @@ class ServoMotor {
     
     void begin();
     void update(int logLevel = 0);
+    void setLogCallback(void (*callback)(const String&));
+    void log(const String& msg);
 };
 
 #endif

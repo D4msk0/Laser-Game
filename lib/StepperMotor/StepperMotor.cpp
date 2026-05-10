@@ -9,9 +9,20 @@ StepperMotor::StepperMotor(int pin1, int pin2, int pin3, int pin4, int sweepRang
   _maxWait = maxWait;
   _waitUntil = 0;
   _waiting = false;
+  _logCallback = nullptr;
 
   _stepper.setMaxSpeed(_speed);
   _stepper.setAcceleration(200.0);
+}
+
+void StepperMotor::setLogCallback(void (*callback)(const String&))
+{
+  _logCallback = callback;
+}
+
+void StepperMotor::log(const String& msg)
+{
+  if (_logCallback) _logCallback(msg);
 }
 
 void StepperMotor::begin()
@@ -33,6 +44,7 @@ void StepperMotor::update(int logLevel)
       {
         String msg = "[STEPPER] Moving to: " + String(target);
         Serial.println(msg);
+        log(msg);
       }
     }
     return;
@@ -49,6 +61,7 @@ void StepperMotor::update(int logLevel)
     {
       String msg = "[STEPPER] Waiting at: " + String(_stepper.currentPosition());
       Serial.println(msg);
+      log(msg);
     }
   }
 }

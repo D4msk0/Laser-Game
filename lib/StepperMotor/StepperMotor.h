@@ -13,11 +13,14 @@ class StepperMotor {
     unsigned long _maxWait;
     unsigned long _waitUntil;
     bool _waiting;
+    void (*_logCallback)(const String&) = nullptr;
 
   public:
     StepperMotor(int pin1, int pin2, int pin3, int pin4, int sweepRange, float speed, unsigned long minWait, unsigned long maxWait);
     void begin();
     void update(int logLevel = 0);
+    void setLogCallback(void (*callback)(const String&));
+    void log(const String& msg);
 };
 
 #endif

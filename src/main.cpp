@@ -31,15 +31,19 @@ void setup()
   randomSeed(analogRead(34));
 
   controller.begin();
-  controller.setLogCallback([](const String &msg)
-                            {
-#if (DEBUG_LEVEL >= 1) 
-    Serial.println(msg);
-#endif
-    WebSerial.println(msg); });
+  controller.setLogCallback([](const String &msg) {
+    WebSerial.println(msg);
+  });
 
   Servo1.begin();
+  Servo1.setLogCallback([](const String &msg) {
+    WebSerial.println(msg);
+  });
+
   Stepper1.begin();
+  Stepper1.setLogCallback([](const String &msg) {
+    WebSerial.println(msg);
+  });
 }
 
 void loop()

@@ -1,5 +1,4 @@
 #include "ServoMotor.h"
-#include <WebSerial.h>
 
 ServoMotor::ServoMotor(int pin, int minAngle, int maxAngle, int minWait, int maxWait) {
   _pin = pin;
@@ -9,6 +8,17 @@ ServoMotor::ServoMotor(int pin, int minAngle, int maxAngle, int minWait, int max
   _maxWait = maxWait;
   _prevTime = 0;
   _interval = 0;
+  _logCallback = nullptr;
+}
+
+void ServoMotor::setLogCallback(void (*callback)(const String&))
+{
+  _logCallback = callback;
+}
+
+void ServoMotor::log(const String& msg)
+{
+  if (_logCallback) _logCallback(msg);
 }
 
 void ServoMotor::begin() {
@@ -28,9 +38,9 @@ void ServoMotor::update(int logLevel) {
 
     // Only print when debug is true
     if (logLevel >= 2) {
-      String logMsg = "[SERVO Pin " + String(_pin) + "] Angle: " + String(randomAngle);
-        Serial.println(logMsg);
-        WebSerial.println(logMsg);
+      String msg = "[SERVO Pin " + String(_pin) + "] Angle: " + String(randomAngle);
+      Serial.println(msg);
+        log(msg);
     }
   }
 }
