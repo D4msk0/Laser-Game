@@ -21,9 +21,10 @@ void setup() {
   network.begin(DEBUG_LEVEL);
   network.setMsgCallback(handleWebMsg);
 
+  randomSeed(analogRead(34));
+
   controller.begin();
   Servo1.begin();
-  randomSeed(analogRead(34));
 }
 
 void loop() {
