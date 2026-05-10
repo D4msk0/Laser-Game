@@ -3,7 +3,7 @@
 Controller::Controller(int buttonPin, unsigned long runtimeMinutes)
 {
   _buttonPin = buttonPin;
-  _runtimeLimit = runtimeMinutes * 60 * 1000;
+  _runtimeLimit = (unsigned long)runtimeMinutes * 60UL * 1000UL;
   _lastButtonState = HIGH;
   _isRunning = false;
   _lastDebounceTime = 0;
@@ -14,30 +14,39 @@ void Controller::begin()
   pinMode(_buttonPin, INPUT_PULLUP);
 }
 
+void Controller::setLogCallback(void (*callback)(const String&))
+{
+  _logCallback = callback;
+}
+
+void Controller::log(const String& msg)
+{
+  if (_logCallback) _logCallback(msg);
+}
+
 bool Controller::start()
 {
   if (_isRunning)
   {
-    WebSerial.println("[SYSTEM] Already running. Command ignored.");
+    log("[SYSTEM] Already running. Command ignored.");
     return false;
   }
   _isRunning = true;
   _startTime = millis();
-  WebSerial.println("[SYSTEM] Remote start received.");
+  log("[SYSTEM] Remote start received.");
   return true;
 }
 
 void Controller::stop()
 {
   _isRunning = false;
-  WebSerial.println("[SYSTEM] Remote stop received.");
+  log("[SYSTEM] Remote stop received.");
 }
 
 void Controller::update(int logLevel)
 {
-  bool currentState = digitalRead(_buttonPin);
+  int currentState = digitalRead(_buttonPin);
 
-  // Button logic (State Change + Debounce)
   if (currentState == LOW && _lastButtonState == HIGH)
   {
     if (millis() - _lastDebounceTime > 50)
@@ -49,31 +58,27 @@ void Controller::update(int logLevel)
       {
         _startTime = millis();
         String msg = "[TIMER] Started manually!";
-        WebSerial.println(msg);
-        if (logLevel >= 1)
-          Serial.println(msg);
+        log(msg);
+        if (logLevel >= 1) Serial.println(msg);
       }
       else
       {
         String msg = "[TIMER] Manually stopped.";
-        WebSerial.println(msg);
-        if (logLevel >= 1)
-          Serial.println(msg);
+        log(msg);
+        if (logLevel >= 1) Serial.println(msg);
       }
     }
   }
   _lastButtonState = currentState;
 
-  // Auto-stop logic
   if (_isRunning)
   {
     if (millis() - _startTime >= _runtimeLimit)
     {
       _isRunning = false;
       String msg = "[TIMER] Time is up. Auto-stop.";
-      WebSerial.println(msg);
-      if (logLevel >= 1)
-        Serial.println(msg);
+      log(msg);
+      if (logLevel >= 1) Serial.println(msg);
     }
   }
 }
@@ -92,10 +97,12 @@ void Controller::handleMessage(uint8_t *data, size_t len, int logLevel)
     Serial.println(msg);
   }
 
-  if (msg == "start") {
-    if (this->start()) {
+  if (msg == "start")
+  {
+    if (this->start())
+    {
       String out = "[WEB] System started";
-      WebSerial.println(out);
+      log(out);
       if (logLevel >= 1) Serial.println(out);
     }
   }
@@ -103,37 +110,30 @@ void Controller::handleMessage(uint8_t *data, size_t len, int logLevel)
   {
     this->stop();
     String out = "[WEB] System stopped";
-    WebSerial.println(out);
-    if (logLevel >= 1)
-      Serial.println(out);
+    log(out);
+    if (logLevel >= 1) Serial.println(out);
   }
   else if (msg == "status")
   {
     if (_isRunning)
     {
       long timeLeft = getRemainingTime();
-
-      WebSerial.printf("[STATUS] Active. Remaining: %ldm %lds\n", timeLeft / 60, timeLeft % 60);
-
-      if (logLevel >= 1)
-      {
-        Serial.printf("[STATUS] Active. Remaining: %ldm %lds\n", timeLeft / 60, timeLeft % 60);
-      }
+      String out = "[STATUS] Active. Remaining: " + String(timeLeft / 60) + "m " + String(timeLeft % 60) + "s";
+      log(out);
+      if (logLevel >= 1) Serial.println(out);
     }
     else
     {
       String out = "[STATUS] System is stand-by.";
-      WebSerial.println(out);
-      if (logLevel >= 1)
-        Serial.println(out);
+      log(out);
+      if (logLevel >= 1) Serial.println(out);
     }
   }
   else
   {
     String out = "[WEB] Unknown command: " + msg;
-    WebSerial.println(out);
-    if (logLevel >= 1)
-      Serial.println(out);
+    log(out);
+    if (logLevel >= 1) Serial.println(out);
   }
 }
 
@@ -144,11 +144,8 @@ bool Controller::isRunning()
 
 long Controller::getRemainingTime()
 {
-  if (!_isRunning)
-    return 0;
+  if (!_isRunning) return 0;
   unsigned long elapsed = millis() - _startTime;
-  if (elapsed >= _runtimeLimit)
-    return 0;
-
-  return (_runtimeLimit - elapsed) / 1000; // Return remaining time in seconds
+  if (elapsed >= _runtimeLimit) return 0;
+  return (_runtimeLimit - elapsed) / 1000;
 }

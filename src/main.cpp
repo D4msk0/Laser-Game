@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <WebSerial.h>
+
 #include "NetworkManager.h"
 #include "RandomServo.h"
 #include "Controller.h"
@@ -24,6 +26,10 @@ void setup() {
   randomSeed(analogRead(34));
 
   controller.begin();
+  controller.setLogCallback([](const String& msg) {
+    if (DEBUG_LEVEL >= 1) Serial.println(msg);
+    WebSerial.println(msg);
+  });
   Servo1.begin();
 }
 

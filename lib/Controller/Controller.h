@@ -2,7 +2,6 @@
 #define CONTROLLER_H
 
 #include <Arduino.h>
-#include <WebSerial.h>
 
 class Controller {
   private:
@@ -12,6 +11,7 @@ class Controller {
     unsigned long _lastDebounceTime;
     int _lastButtonState;
     bool _isRunning;
+    void (*_logCallback)(const String&) = nullptr;
 
   public:
     Controller(int buttonPin, unsigned long runtimeMinutes);
@@ -19,9 +19,11 @@ class Controller {
     void update(int logLevel = 0);
     bool start();
     void stop();
+    void log(const String& msg);
     void handleMessage(uint8_t *data, size_t len, int logLevel = 0);
     bool isRunning(); // Check to see if the controller is currently running
     long getRemainingTime(); // Get the remaining time in seconds
+    void setLogCallback(void (*callback)(const String&));
 };
 
 #endif
