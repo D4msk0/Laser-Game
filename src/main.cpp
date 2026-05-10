@@ -80,18 +80,15 @@ void setup()
   randomSeed(analogRead(34));
 
   controller.begin();
-  controller.setLogCallback([](const String &msg)
-                            {
+  controller.setLogCallback([](const String &msg){
   if (debugLevel >= 1) WebSerial.println(msg); });
 
   Servo1.begin();
-  Servo1.setLogCallback([](const String &msg)
-                        {
+  Servo1.setLogCallback([](const String &msg){
   if (debugLevel >= 2) WebSerial.println(msg); });
 
   Stepper1.begin();
-  Stepper1.setLogCallback([](const String &msg)
-                          {
+  Stepper1.setLogCallback([](const String &msg){
   if (debugLevel >= 2) WebSerial.println(msg); });
 }
 

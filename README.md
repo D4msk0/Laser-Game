@@ -28,6 +28,7 @@ The system manages autonomous servo and stepper motor movements, a physical time
 - `lib/ServoMotor`: Manages random, jitter-free servo positioning within safe limits
 - `lib/StepperMotor`: Manages organic random sweep movements within a configurable range
 - `lib/Controller`: Manages global state (Start/Stop), physical button logic, and the countdown timer
+- `include/secrets.h`: WiFi credentials (excluded from version control — copy `secrets.h.template` and fill in your credentials)
 
 ## 📡 Web Commands (via WebSerial)
 | Command | Description |
