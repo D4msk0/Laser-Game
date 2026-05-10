@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <ESP32Servo.h>
+#include <WebSerial.h>
 
 class RandomServo {
   private:

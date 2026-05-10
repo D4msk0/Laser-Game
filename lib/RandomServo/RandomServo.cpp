@@ -1,4 +1,5 @@
 #include "RandomServo.h"
+#include <WebSerial.h>
 
 RandomServo::RandomServo(int pin, int minAngle, int maxAngle, int minWait, int maxWait) {
   _pin = pin;
@@ -27,9 +28,9 @@ void RandomServo::update(int logLevel) {
 
     // Only print when debug is true
     if (logLevel >= 2) {
-      Serial.print("Servo (Pin "); Serial.print(_pin);
-      Serial.print(") -> Angle: "); Serial.print(randomAngle);
-      Serial.print(" | Next move in: "); Serial.print(_interval); Serial.println("ms");
+      String logMsg = "[SERVO Pin " + String(_pin) + "] Angle: " + String(randomAngle);
+        Serial.println(logMsg);
+        WebSerial.println(logMsg);
     }
   }
 }

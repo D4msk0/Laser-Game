@@ -15,6 +15,9 @@
 *.tmp
 *.bak
 
+# Private bestanden (zoals WiFi credentials)
+include/secrets.h 
+
 # OS specifieke rommel
 .DS_Store
 Thumbs.db
