@@ -14,7 +14,7 @@ class NetworkManager {
 
   public:
     NetworkManager(const char* ssid, const char* password, AsyncWebServer* server);
-    void begin(int logLevel = 1);
+    void begin(int logLevel = 0);
     void setMsgCallback(void (*callback)(uint8_t*, size_t));
 };
 
