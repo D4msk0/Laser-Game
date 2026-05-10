@@ -10,7 +10,7 @@ class Controller {
     unsigned long _runtimeLimit;
     unsigned long _startTime;
     unsigned long _lastDebounceTime;
-    bool _lastButtonState;
+    int _lastButtonState;
     bool _isRunning;
 
   public:
