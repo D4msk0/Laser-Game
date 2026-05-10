@@ -27,9 +27,12 @@ void setup() {
 
   controller.begin();
   controller.setLogCallback([](const String& msg) {
-    if (DEBUG_LEVEL >= 1) Serial.println(msg);
+    #if (DEBUG_LEVEL >= 1) 
+    Serial.println(msg);
+    #endif
     WebSerial.println(msg);
   });
+  
   Servo1.begin();
 }
 
