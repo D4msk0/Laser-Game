@@ -11,6 +11,7 @@ class NetworkManager {
     const char* _ssid;
     const char* _password;
     AsyncWebServer* _server;
+    void (*_msgCallback)(uint8_t*, size_t);
 
   public:
     NetworkManager(const char* ssid, const char* password, AsyncWebServer* server);

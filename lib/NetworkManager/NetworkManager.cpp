@@ -1,9 +1,7 @@
 #include "NetworkManager.h"
 
 NetworkManager::NetworkManager(const char* ssid, const char* password, AsyncWebServer* server) 
-  : _ssid(ssid), _password(password), _server(server) {}
-
-void (*_msgCallback)(uint8_t*, size_t) = nullptr;
+  : _ssid(ssid), _password(password), _server(server), _msgCallback(nullptr) {}
 
 // Function to set the message callback
 void NetworkManager::setMsgCallback(void (*callback)(uint8_t*, size_t)) {
@@ -20,9 +18,10 @@ void NetworkManager::begin(int logLevel) {
   }
 
   // De juiste manier voor nieuwere WebSerial versies:
+  static NetworkManager* _instance = this; // Safe: only one NetworkManager instance expected on ESP32
   WebSerial.begin(_server);
   WebSerial.msgCallback([](uint8_t *data, size_t len) {
-    if (_msgCallback) _msgCallback(data, len);
+    if (_instance->_msgCallback) _instance->_msgCallback(data, len);
   });
   _server->begin();
 
