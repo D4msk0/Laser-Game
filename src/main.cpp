@@ -6,7 +6,7 @@
 #include "Controller.h"
 #include "secrets.h"
 
-#define DEBUG_LEVEL 2
+#include "config.h"
 
 AsyncWebServer server(80);
 NetworkManager network(ssid, password, &server);
@@ -32,7 +32,7 @@ void setup() {
     #endif
     WebSerial.println(msg);
   });
-  
+
   Servo1.begin();
 }
 
