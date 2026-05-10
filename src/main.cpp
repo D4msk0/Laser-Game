@@ -27,11 +27,10 @@ void handleWebMsg(uint8_t *data, size_t len)
 
   if (msg == "debug status")
   {
-    String levels = "[DEBUG] Current level: " + String(debugLevel) + "\n"
-                  "  0 = Silent\n"
-                  "  1 = Browser monitoring (WebSerial only)\n"
-                  "  2 = Full debug (WebSerial + Serial + hardware logs)";
-    WebSerial.println(levels);
+    WebSerial.println("[DEBUG] Current level: " + String(debugLevel) + "\n"
+                      "  0 = Silent\n"
+                      "  1 = Browser monitoring (WebSerial only)\n"
+                      "  2 = Full debug (WebSerial + Serial + hardware logs)");
     return;
   }
 
@@ -41,12 +40,29 @@ void handleWebMsg(uint8_t *data, size_t len)
     if (newLevel >= 0 && newLevel <= 2)
     {
       debugLevel = newLevel;
-      WebSerial.println("[DEBUG] Level set to: " + String(debugLevel));
+      WebSerial.println("[DEBUG] Level set to: " + String(debugLevel) + "\n"
+                        "  0 = Silent\n"
+                        "  1 = Browser monitoring (WebSerial only)\n"
+                        "  2 = Full debug (WebSerial + Serial + hardware logs)");
     }
     else
     {
       WebSerial.println("[DEBUG] Invalid level. Use 0, 1 or 2.");
     }
+    return;
+  }
+
+  if (msg == "help")
+  {
+    WebSerial.println("Available commands:\n"
+                      "  start         - Start the session\n"
+                      "  stop          - Stop the session\n"
+                      "  status        - Show remaining session time\n"
+                      "  debug status  - Show current debug level\n"
+                      "  debug 0       - Silent (no logging)\n"
+                      "  debug 1       - Browser monitoring (WebSerial only)\n"
+                      "  debug 2       - Full debug (WebSerial + Serial + hardware logs)\n"
+                      "  help          - Show this message");
     return;
   }
 
